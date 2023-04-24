@@ -1,15 +1,21 @@
-import './AddTodo.scss';
-
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
+import { makeStyles, createStyles } from '@mui/styles';
 import { useDispatch } from 'react-redux';
 import { addTodo } from '../../redux/todosSlice';
 
-const DEFAULT_CLASSNAME = 'add-todo';
+const useStyles = makeStyles(() =>
+  createStyles({
+    addTodo: {
+      margin: '0 auto',
+    },
+  })
+);
 
 const AddTodo: React.FC = () => {
   const [todoText, setTodoText] = useState('');
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,12 +29,15 @@ const AddTodo: React.FC = () => {
     setTodoText(event.target.value);
   };
 
+
+
+
   return (
     <Box
       component='form'
       onSubmit={handleSubmit}
       sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: '10px' }}
-      className={DEFAULT_CLASSNAME}
+      className={classes.addTodo}
     >
       <TextField
         label='Add task'

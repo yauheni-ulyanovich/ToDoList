@@ -1,21 +1,28 @@
-import './Header.scss';
-
 import React from 'react';
+import { makeStyles, createStyles } from '@mui/styles';
 
 interface HeaderProps {
   title: string;
-  subtitle?: string;
 }
 
-const DEFAULT_CLASSNAME = 'header';
+const useStyles = makeStyles(() =>
+  createStyles({
+    header: {
+      padding: '1rem',
+      textAlign: 'center'
+    },
+    title: {
+      margin: 0,
+      fontSize: '2rem'
+    }
+  })
+);
 
-const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
+const Header: React.FC<HeaderProps> = ({ title }) => {
+  const classes = useStyles();
   return (
-    <header className={DEFAULT_CLASSNAME}>
-      <h1 className={`${DEFAULT_CLASSNAME}__title`}>{title}</h1>
-      {subtitle && (
-        <h2 className={`${DEFAULT_CLASSNAME}__subtitle`}>{subtitle}</h2>
-      )}
+    <header className={classes.header}>
+      <h1 className={classes.title}>{title}</h1>
     </header>
   );
 };

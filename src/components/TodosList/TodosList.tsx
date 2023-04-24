@@ -1,5 +1,3 @@
-import './TodosList.scss';
-
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -13,8 +11,6 @@ import {
   Checkbox,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-const DEFAULT_CLASSNAME = 'todo-list';
 
 const TodosList: React.FC = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
