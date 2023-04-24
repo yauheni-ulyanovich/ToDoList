@@ -1,0 +1,21 @@
+$header-padding: 1rem;
+
+$header-title-font-size: 2rem;
+$header-subtitle-font-size: 1.25rem;
+$header-subtitle-color: #6c757d;
+
+.header {
+  padding: $header-padding;
+  text-align: center;
+
+  &__title {
+    margin: 0;
+    font-size: $header-title-font-size;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: $header-subtitle-font-size;
+    color: $header-subtitle-color;
+  }
+}

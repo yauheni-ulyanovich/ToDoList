@@ -1,0 +1,10 @@
+.app-wrapper {
+  background-color: #f8f9fa;
+  height: 100vh;
+  &__todo-list-wrapper {
+    margin: 0 auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    min-height: 50vh;
+  }
+}
