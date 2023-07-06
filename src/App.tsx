@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './components/Header';
-import TodoList from './components/TodoList';
-import AddTodo from './components/AddTodo';
+import Header from './components/Header/Header';
+import TodoList from './components/TodoList/TodoList';
+import AddTodo from './components/AddTodo/AddTodo';
 import { Box } from '@mui/material';
 import { makeStyles, createStyles } from '@mui/styles';
 
