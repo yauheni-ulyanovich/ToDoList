@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 export interface Todo {
   id: string;
@@ -45,7 +46,7 @@ const todosSlice = createSlice({
   reducers: {
     addTodo: (state, action: PayloadAction<string>) => {
       const newTodo: Todo = {
-        id: Date.now().toString(),
+        id: nanoid(),
         text: action.payload,
         completed: false,
       };

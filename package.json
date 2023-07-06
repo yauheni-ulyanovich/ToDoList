@@ -17,6 +17,8 @@
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "husky": "^8.0.3",
+    "lodash": "^4.17.21",
+    "nanoid": "^4.0.2",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -58,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
     "prettier": "^2.8.7"
   },
   "husky": {
