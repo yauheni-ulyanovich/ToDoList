@@ -16,7 +16,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const AddTodo: React.FC = () => {
+const AddTodo = () => {
   const [todoText, setTodoText] = useState('');
   const dispatch = useDispatch();
   const classes = useStyles();

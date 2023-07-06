@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const App: React.FC = () => {
+const App = () => {
   const classes = useStyles();
   return (
     <div className={classes.appWrapper}>

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const TodoList: React.FC = () => {
+const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
   const dispatch = useDispatch();
 

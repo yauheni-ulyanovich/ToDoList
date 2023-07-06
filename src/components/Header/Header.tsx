@@ -18,7 +18,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header = (
+  {
+    title
+  }: HeaderProps
+) => {
   const classes = useStyles();
   return (
     <header className={classes.header}>
