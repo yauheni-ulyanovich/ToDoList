@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
-import TodosList from './components/TodosList';
+import TodoList from './components/TodoList';
 import AddTodo from './components/AddTodo';
 import { Box } from '@mui/material';
 import { makeStyles, createStyles } from '@mui/styles';
@@ -29,7 +29,7 @@ const App: React.FC = () => {
       <Header title={'ToDo List'} />
       <Box className={classes.todoListWrapper}>
         <AddTodo />
-        <TodosList />
+        <TodoList />
       </Box>
     </div>
   );
