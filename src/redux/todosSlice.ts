@@ -11,7 +11,7 @@ interface TodosState {
   todos: Todo[];
 }
 
-const saveState = (state: Todo[]) => {
+export const saveState = (state: Todo[]) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('todos', serializedState);
@@ -51,13 +51,11 @@ const todosSlice = createSlice({
         completed: false,
       };
       state.todos.push(newTodo);
-      saveState(state.todos);
     },
     removeTodo: (state, action: PayloadAction<string>) => {
       const index = state.todos.findIndex((todo) => todo.id === action.payload);
       if (index !== -1) {
         state.todos.splice(index, 1);
-        saveState(state.todos);
       }
     },
     toggleTodo: (state, action: PayloadAction<string>) => {
@@ -65,7 +63,6 @@ const todosSlice = createSlice({
       if (todo) {
         todo.completed = !todo.completed;
       }
-      saveState(state.todos);
     },
   },
 });

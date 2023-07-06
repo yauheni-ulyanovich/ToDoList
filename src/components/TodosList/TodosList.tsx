@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { Todo, removeTodo, toggleTodo } from '../../redux/todosSlice';
+import { Todo, removeTodo, toggleTodo, saveState } from '../../redux/todosSlice';
 import {
   List,
   ListItem,
@@ -15,6 +15,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const TodosList: React.FC = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    saveState(todos);
+  }, [todos]);
 
   const handleDelete = (id: string) => {
     dispatch(removeTodo(id));
