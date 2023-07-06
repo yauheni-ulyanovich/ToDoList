@@ -16,6 +16,7 @@
     "@types/node": "^18.15.13",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
+    "husky": "^8.0.3",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,13 +29,21 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "format": "prettier --write ."
+    "format": "eslint . --fix && prettier --write ."
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 1
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -50,5 +59,10 @@
   },
   "devDependencies": {
     "prettier": "^2.8.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
   }
 }

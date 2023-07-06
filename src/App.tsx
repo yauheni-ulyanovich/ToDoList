@@ -15,7 +15,9 @@ const useStyles = makeStyles(() =>
       margin: '0 auto',
       border: '1px solid black',
       borderRadius: '5px',
-      minHeight: '50vh'
+      minHeight: '50vh',
+      width: '100%',
+      maxWidth: 360,
     }
   })
 );
@@ -25,10 +27,7 @@ const App: React.FC = () => {
   return (
     <div className={classes.appWrapper}>
       <Header title={'ToDo List'} />
-      <Box
-        className={classes.todoListWrapper}
-        sx={{ width: '100%', maxWidth: 360 }}
-      >
+      <Box className={classes.todoListWrapper}>
         <AddTodo />
         <TodosList />
       </Box>

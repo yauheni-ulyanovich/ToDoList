@@ -8,6 +8,10 @@ const useStyles = makeStyles(() =>
   createStyles({
     addTodo: {
       margin: '0 auto',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 1,
+      padding: '10px',
     },
   })
 );
@@ -29,14 +33,10 @@ const AddTodo: React.FC = () => {
     setTodoText(event.target.value);
   };
 
-
-
-
   return (
     <Box
       component='form'
       onSubmit={handleSubmit}
-      sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: '10px' }}
       className={classes.addTodo}
     >
       <TextField
