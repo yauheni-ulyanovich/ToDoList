@@ -66,7 +66,7 @@ const App = () => {
         >
           <Card
             sx={{
-              maxWidth: 345,
+              maxWidth: '25vw',
               margin: '0 auto',
               border: 1,
               borderColor: 'text.primary',
