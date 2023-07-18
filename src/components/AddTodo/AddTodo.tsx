@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TextField, Button, Box} from '@mui/material';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import {addTodo} from '../../redux/todosSlice';
 import {RootState} from '../../redux/store';
 
