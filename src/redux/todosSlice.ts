@@ -1,5 +1,5 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {nanoid} from 'nanoid';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 export interface Todo {
   id: string;
@@ -67,5 +67,5 @@ const todosSlice = createSlice({
   },
 });
 
-export const {addTodo, removeTodo, toggleTodo} = todosSlice.actions;
+export const { addTodo, removeTodo, toggleTodo } = todosSlice.actions;
 export default todosSlice.reducer;

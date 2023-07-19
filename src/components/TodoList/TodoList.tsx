@@ -1,7 +1,12 @@
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState} from '../../redux/store';
-import {Todo, removeTodo, toggleTodo, saveState} from '../../redux/todosSlice';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../redux/store';
+import {
+  Todo,
+  removeTodo,
+  toggleTodo,
+  saveState,
+} from '../../redux/todosSlice';
 import {
   List,
   ListItem,
@@ -12,10 +17,11 @@ import {
   Collapse,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {TransitionGroup} from 'react-transition-group';
+import { TransitionGroup } from 'react-transition-group';
 
 const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,7 +37,7 @@ const TodoList = () => {
   };
 
   return (
-    <List sx={{width: '100%', maxHeight: '50vh', overflowY: 'auto'}}>
+    <List sx={{ width: '100%', maxHeight: '50vh', overflowY: 'auto' }}>
       <TransitionGroup>
         {todos.map((todo: Todo) => (
           <Collapse in={true} timeout='auto' unmountOnExit key={todo.id}>
@@ -51,7 +57,7 @@ const TodoList = () => {
               />
               <ListItemSecondaryAction>
                 <IconButton edge='end' onClick={() => handleDelete(todo.id)}>
-                  <DeleteIcon/>
+                  <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>

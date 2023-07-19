@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const LIGHT = 'light';
 export const DARK = 'dark';
@@ -20,7 +20,7 @@ const loadState = (): appState => {
     const mode = localStorage.getItem('mode');
     if (!mode) {
       return {
-        mode: undefined
+        mode: undefined,
       };
     }
     return {
@@ -40,11 +40,14 @@ const appSlice = createSlice({
   name: 'appConfig',
   initialState,
   reducers: {
-    switchTheme: (state, action: PayloadAction<'light' | 'dark' | undefined>) => {
+    switchTheme: (
+      state,
+      action: PayloadAction<'light' | 'dark' | undefined>
+    ) => {
       state.mode = action.payload;
     },
   },
 });
 
-export const {switchTheme} = appSlice.actions;
+export const { switchTheme } = appSlice.actions;
 export default appSlice.reducer;
