@@ -1,6 +1,6 @@
 import './App.scss';
 
-import React, {useMemo, createContext, useEffect } from 'react';
+import React, {useMemo, createContext, useEffect} from 'react';
 import TodoList from './components/TodoList/TodoList';
 import AddTodo from './components/AddTodo/AddTodo';
 import {
