@@ -17,6 +17,7 @@
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "husky": "^8.0.3",
+    "idb": "^7.1.1",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
     "node-sass": "^7.0.3",

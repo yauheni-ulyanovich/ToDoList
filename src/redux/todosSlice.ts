@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
+import { saveToDb, loadFromDb, initDb } from '../utils/db';
+import { AppThunk } from './store';
 
 export interface Todo {
   id: string;
@@ -11,26 +13,29 @@ interface TodosState {
   todos: Todo[];
 }
 
-export const saveState = (state: Todo[]) => {
+export const saveState = async (state: Todo[]) => {
   try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('todos', serializedState);
+    await initDb();
+    debugger;
+    await saveToDb('todos', state);
   } catch (error) {
     console.error('Error saving state:', error);
   }
 };
 
-const loadState = (): TodosState => {
+const loadState = async (): Promise<{ todos: Todo[] }> => {
   const emptyState = {
     todos: [],
   };
   try {
-    const serializedState = localStorage.getItem('todos');
-    if (serializedState === null) {
+    await initDb();
+    const loadedState = await loadFromDb('todos');
+    if (loadedState === undefined) {
       return emptyState;
     }
     return {
-      todos: JSON.parse(serializedState),
+      // @ts-ignore
+      todos: loadedState,
     };
   } catch (error) {
     console.error('Error loading state:', error);
@@ -38,7 +43,7 @@ const loadState = (): TodosState => {
   }
 };
 
-const initialState: TodosState = loadState();
+const initialState: TodosState = { todos: [] };
 
 const todosSlice = createSlice({
   name: 'todosList',
@@ -64,8 +69,16 @@ const todosSlice = createSlice({
         todo.completed = !todo.completed;
       }
     },
+    addMany: (state, action: PayloadAction<Todo[]>) => {
+      state.todos.push(...action.payload);
+    },
   },
 });
+
+export const loadTodosAsync = (): AppThunk => async (dispatch) => {
+  const loadedState = await loadState();
+  dispatch(todosSlice.actions.addMany(loadedState.todos));
+};
 
 export const { addTodo, removeTodo, toggleTodo } = todosSlice.actions;
 export default todosSlice.reducer;

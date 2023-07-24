@@ -16,16 +16,22 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { switchTheme, saveState, LIGHT, DARK } from './redux/appSlice';
+import {
+  loadThemeAsync,
+  saveThemeAsync,
+  saveState,
+  LIGHT,
+  DARK,
+} from './redux/appSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './redux/store';
+import { RootState, AppDispatch } from './redux/store';
 
 const ColorModeContext = createContext({
   toggleColorMode: (mode: 'light' | 'dark' | undefined) => {},
 });
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const mode = useSelector((state: RootState) => state.config.mode);
 
@@ -34,9 +40,7 @@ const App = () => {
     : LIGHT;
 
   useEffect(() => {
-    if (!mode) {
-      dispatch(switchTheme(prefersColorScheme));
-    }
+    dispatch(loadThemeAsync(prefersColorScheme));
   }, []);
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const App = () => {
   const colorMode = useMemo(
     () => ({
       toggleColorMode: (mode: 'light' | 'dark' | undefined) => {
-        dispatch(switchTheme(mode === LIGHT ? DARK : LIGHT));
+        dispatch(saveThemeAsync(mode === LIGHT ? DARK : LIGHT));
       },
     }),
     []

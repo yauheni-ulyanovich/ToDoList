@@ -1,26 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { saveToDb, loadFromDb, initDb } from '../utils/db';
+import { AppThunk } from './store';
 
 export const LIGHT = 'light';
 export const DARK = 'dark';
 
-interface appState {
+export interface appState {
   mode: 'light' | 'dark' | undefined;
 }
 
-export const saveState = (mode: 'light' | 'dark' | undefined) => {
+export const saveState = async (mode: 'light' | 'dark' | undefined) => {
   try {
-    localStorage.setItem('mode', mode || LIGHT);
+    await initDb();
+    await saveToDb('mode', mode);
   } catch (error) {
     console.error('Error saving state:', error);
   }
 };
 
-const loadState = (): appState => {
+const loadState = async (
+  prefersColorScheme: 'light' | 'dark'
+): Promise<appState> => {
   try {
-    const mode = localStorage.getItem('mode');
+    await initDb();
+    const mode = await loadFromDb('mode');
+    debugger;
     if (!mode) {
       return {
-        mode: undefined,
+        mode: prefersColorScheme || undefined,
       };
     }
     return {
@@ -34,11 +41,11 @@ const loadState = (): appState => {
   }
 };
 
-const initialState: appState = loadState();
-
 const appSlice = createSlice({
   name: 'appConfig',
-  initialState,
+  initialState: {
+    mode: LIGHT,
+  } as appState,
   reducers: {
     switchTheme: (
       state,
@@ -51,3 +58,20 @@ const appSlice = createSlice({
 
 export const { switchTheme } = appSlice.actions;
 export default appSlice.reducer;
+
+// Thunk action for loading theme state
+export const loadThemeAsync =
+  (prefersColorScheme: 'light' | 'dark'): AppThunk =>
+  async (dispatch) => {
+    const state = await loadState(prefersColorScheme);
+    debugger;
+    dispatch(switchTheme(state.mode));
+  };
+
+// Thunk action for saving theme state
+export const saveThemeAsync =
+  (mode: 'light' | 'dark' | undefined): AppThunk =>
+  async (dispatch) => {
+    await saveState(mode);
+    dispatch(switchTheme(mode));
+  };

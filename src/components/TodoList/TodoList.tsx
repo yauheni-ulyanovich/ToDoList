@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState, AppDispatch } from '../../redux/store';
 import {
   Todo,
   removeTodo,
   toggleTodo,
   saveState,
+  loadTodosAsync,
 } from '../../redux/todosSlice';
 import {
   List,
@@ -22,7 +23,11 @@ import { TransitionGroup } from 'react-transition-group';
 const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(loadTodosAsync());
+  }, []);
 
   useEffect(() => {
     saveState(todos);
