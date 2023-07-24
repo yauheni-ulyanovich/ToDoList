@@ -24,7 +24,6 @@ const loadState = async (
   try {
     await initDb();
     const mode = await loadFromDb('mode');
-    debugger;
     if (!mode) {
       return {
         mode: prefersColorScheme || undefined,
@@ -64,7 +63,6 @@ export const loadThemeAsync =
   (prefersColorScheme: 'light' | 'dark'): AppThunk =>
   async (dispatch) => {
     const state = await loadState(prefersColorScheme);
-    debugger;
     dispatch(switchTheme(state.mode));
   };
 

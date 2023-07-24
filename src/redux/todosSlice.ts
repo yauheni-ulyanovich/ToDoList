@@ -16,7 +16,6 @@ interface TodosState {
 export const saveState = async (state: Todo[]) => {
   try {
     await initDb();
-    debugger;
     await saveToDb('todos', state);
   } catch (error) {
     console.error('Error saving state:', error);
