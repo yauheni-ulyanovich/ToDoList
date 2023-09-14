@@ -1,44 +1,43 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
+import { db } from '../utils/db';
 
 export interface Todo {
   id: string;
   text: string;
   completed: boolean;
+  timestamp: number;
 }
 
 interface TodosState {
   todos: Todo[];
+  status?: string;
+  error?: string;
 }
 
-export const saveState = (state: Todo[]) => {
+export enum Status {
+  LOADING = 'loading',
+  SUCCEEDED = 'succeeded',
+  FAILED = 'failed'
+}
+
+export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
+  const todos = await db.todos.toArray();
+  return todos;
+});
+
+export const saveState = async (state: Todo[]) => {
   try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('todos', serializedState);
+    await db.todos.clear();
+    await db.todos.bulkPut(state);
   } catch (error) {
-    console.error('Error saving state:', error);
+    console.error('Error saving state to database:', error);
   }
 };
 
-const loadState = (): TodosState => {
-  const emptyState = {
-    todos: [],
-  };
-  try {
-    const serializedState = localStorage.getItem('todos');
-    if (serializedState === null) {
-      return emptyState;
-    }
-    return {
-      todos: JSON.parse(serializedState),
-    };
-  } catch (error) {
-    console.error('Error loading state:', error);
-    return emptyState;
-  }
+const initialState: TodosState = {
+  todos: [],
 };
-
-const initialState: TodosState = loadState();
 
 const todosSlice = createSlice({
   name: 'todosList',
@@ -49,6 +48,7 @@ const todosSlice = createSlice({
         id: nanoid(),
         text: action.payload,
         completed: false,
+        timestamp: Date.now()
       };
       state.todos.push(newTodo);
     },
@@ -64,6 +64,20 @@ const todosSlice = createSlice({
         todo.completed = !todo.completed;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTodos.pending, (state) => {
+        state.status = Status.LOADING;
+      })
+      .addCase(fetchTodos.fulfilled, (state, action: PayloadAction<Todo[]>) => {
+        state.status = Status.SUCCEEDED;
+        state.todos = action.payload;
+      })
+      .addCase(fetchTodos.rejected, (state, action) => {
+        state.status = Status.FAILED;
+        state.error = action.error.message;
+      });
   },
 });
 

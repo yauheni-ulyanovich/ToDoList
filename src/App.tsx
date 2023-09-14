@@ -16,39 +16,35 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { switchTheme, saveState, LIGHT, DARK } from './redux/appSlice';
+import { switchTheme, Theme, saveTheme, fetchTheme } from './redux/appSlice';
+import { fetchTodos } from './redux/todosSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './redux/store';
+import { RootState, AppDispatch } from './redux/store';
 
 const ColorModeContext = createContext({
   toggleColorMode: (mode: 'light' | 'dark' | undefined) => {},
 });
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const mode = useSelector((state: RootState) => state.config.mode);
 
   const prefersColorScheme = useMediaQuery('(prefers-color-scheme: dark)')
-    ? DARK
-    : LIGHT;
+    ? Theme.DARK
+    : Theme.LIGHT;
 
   useEffect(() => {
-    if (!mode) {
-      dispatch(switchTheme(prefersColorScheme));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mode) {
-      saveState(mode);
-    }
-  }, [mode]);
+    dispatch(fetchTodos());
+    dispatch(fetchTheme(prefersColorScheme));
+  }, [dispatch]);
 
   const colorMode = useMemo(
     () => ({
       toggleColorMode: (mode: 'light' | 'dark' | undefined) => {
-        dispatch(switchTheme(mode === LIGHT ? DARK : LIGHT));
+        const theme = mode === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
+        dispatch(switchTheme(theme));
+        saveTheme(theme);
       },
     }),
     []

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState, AppDispatch } from '../../redux/store';
 import {
   Todo,
   removeTodo,
   toggleTodo,
   saveState,
+  Status
 } from '../../redux/todosSlice';
 import {
   List,
@@ -21,11 +22,15 @@ import { TransitionGroup } from 'react-transition-group';
 
 const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
+  const status = useSelector((state: RootState) => state.todosList.status);
+  const sortedTodos = todos.slice().sort((a, b) => b.timestamp - a.timestamp);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    saveState(todos);
+    if (status === Status.SUCCEEDED) {
+       saveState(todos);
+    }
   }, [todos]);
 
   const handleDelete = (id: string) => {
@@ -39,7 +44,7 @@ const TodoList = () => {
   return (
     <List sx={{ width: '100%', maxHeight: '50vh', overflowY: 'auto' }}>
       <TransitionGroup>
-        {todos.map((todo: Todo) => (
+        {sortedTodos.map((todo: Todo) => (
           <Collapse in={true} timeout='auto' unmountOnExit key={todo.id}>
             <ListItem key={todo.id}>
               <Checkbox

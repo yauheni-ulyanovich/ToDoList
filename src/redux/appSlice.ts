@@ -1,40 +1,33 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { db } from '../utils/db';
 
-export const LIGHT = 'light';
-export const DARK = 'dark';
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light'
+}
 
 interface appState {
   mode: 'light' | 'dark' | undefined;
 }
 
-export const saveState = (mode: 'light' | 'dark' | undefined) => {
-  try {
-    localStorage.setItem('mode', mode || LIGHT);
-  } catch (error) {
-    console.error('Error saving state:', error);
-  }
-};
+export const saveTheme = async (mode: 'light' | 'dark' | undefined): Promise<void> => {
+  await db.appConfig.put({ id: 1, mode });
+}
 
-const loadState = (): appState => {
-  try {
-    const mode = localStorage.getItem('mode');
-    if (!mode) {
-      return {
-        mode: undefined,
-      };
-    }
-    return {
-      mode: mode === DARK ? DARK : LIGHT,
-    };
-  } catch (error) {
-    console.error('Error loading state:', error);
-    return {
-      mode: LIGHT,
-    };
-  }
-};
+export const getTheme = async (): Promise<'light' | 'dark' | undefined> => {
+  const config = await db.appConfig.get(1);
+  return config?.mode;
+}
+export const fetchTheme = createAsyncThunk('appConfig/fetchTheme', async (prefersColorScheme: 'light' | 'dark' | undefined) => {
+  const config = await db.appConfig.toArray();
+  const mode = config && config[0] && config[0].mode;
+  debugger
+  return mode || prefersColorScheme;
+});
 
-const initialState: appState = loadState();
+const initialState: appState = {
+  mode: Theme.LIGHT,
+};
 
 const appSlice = createSlice({
   name: 'appConfig',
@@ -46,6 +39,11 @@ const appSlice = createSlice({
     ) => {
       state.mode = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchTheme.fulfilled, (state, action) => {
+      state.mode = action.payload || Theme.LIGHT;
+    });
   },
 });
 

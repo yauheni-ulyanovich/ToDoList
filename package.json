@@ -16,6 +16,7 @@
     "@types/node": "^18.15.13",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
+    "dexie": "^3.2.4",
     "husky": "^8.0.3",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
