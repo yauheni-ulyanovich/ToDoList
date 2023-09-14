@@ -4,7 +4,10 @@ import { Todo } from '../redux/todosSlice';
 
 export class ToDoDatabase extends Dexie {
   todos: Dexie.Table<Todo, string>;
-  appConfig: Dexie.Table<{ id: number, mode: 'light' | 'dark' | undefined }, number>;
+  appConfig: Dexie.Table<
+    { id: number; mode: 'light' | 'dark' | undefined },
+    number
+  >;
 
   constructor(databaseName: string) {
     super(databaseName);

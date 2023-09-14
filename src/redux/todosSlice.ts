@@ -18,7 +18,7 @@ interface TodosState {
 export enum Status {
   LOADING = 'loading',
   SUCCEEDED = 'succeeded',
-  FAILED = 'failed'
+  FAILED = 'failed',
 }
 
 export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
@@ -48,7 +48,7 @@ const todosSlice = createSlice({
         id: nanoid(),
         text: action.payload,
         completed: false,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
       state.todos.push(newTodo);
     },

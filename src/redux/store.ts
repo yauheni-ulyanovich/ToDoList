@@ -9,7 +9,7 @@ const store = configureStore({
     todosList: todosReducer,
     config: appReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
 });
 
 export type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>;

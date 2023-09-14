@@ -6,7 +6,7 @@ import {
   removeTodo,
   toggleTodo,
   saveState,
-  Status
+  Status,
 } from '../../redux/todosSlice';
 import {
   List,
@@ -29,7 +29,7 @@ const TodoList = () => {
 
   useEffect(() => {
     if (status === Status.SUCCEEDED) {
-       saveState(todos);
+      saveState(todos);
     }
   }, [todos]);
 
