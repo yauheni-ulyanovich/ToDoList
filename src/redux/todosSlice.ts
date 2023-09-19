@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import { db } from '../utils/db';
+import { fetchTodos } from '../utils/db';
 
 export interface Todo {
   id: string;
   text: string;
   completed: boolean;
-  timestamp: number;
+  timestamp: Date;
 }
 
 interface TodosState {
@@ -21,20 +21,6 @@ export enum Status {
   FAILED = 'failed',
 }
 
-export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
-  const todos = await db.todos.toArray();
-  return todos;
-});
-
-export const saveState = async (state: Todo[]) => {
-  try {
-    await db.todos.clear();
-    await db.todos.bulkPut(state);
-  } catch (error) {
-    console.error('Error saving state to database:', error);
-  }
-};
-
 const initialState: TodosState = {
   todos: [],
 };
@@ -48,7 +34,7 @@ const todosSlice = createSlice({
         id: nanoid(),
         text: action.payload,
         completed: false,
-        timestamp: Date.now(),
+        timestamp: new Date(),
       };
       state.todos.push(newTodo);
     },

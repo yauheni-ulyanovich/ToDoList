@@ -16,13 +16,13 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { switchTheme, Theme, saveTheme, fetchTheme } from './redux/appSlice';
-import { fetchTodos } from './redux/todosSlice';
+import { switchTheme, Theme } from './redux/appSlice';
+import { fetchTodos, saveTheme, fetchTheme } from './utils/db';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from './redux/store';
 
 const ColorModeContext = createContext({
-  toggleColorMode: (mode: 'light' | 'dark' | undefined) => {},
+  toggleColorMode: (mode: Theme.LIGHT | Theme.DARK | undefined) => {},
 });
 
 const App = () => {
@@ -41,7 +41,7 @@ const App = () => {
 
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: (mode: 'light' | 'dark' | undefined) => {
+      toggleColorMode: (mode: Theme.LIGHT | Theme.DARK | undefined) => {
         const theme = mode === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
         dispatch(switchTheme(theme));
         saveTheme(theme);

@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import {
   Todo,
   removeTodo,
   toggleTodo,
-  saveState,
   Status,
 } from '../../redux/todosSlice';
+import { saveTodosState } from '../../utils/db';
 import {
   List,
   ListItem,
@@ -23,13 +23,16 @@ import { TransitionGroup } from 'react-transition-group';
 const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
   const status = useSelector((state: RootState) => state.todosList.status);
-  const sortedTodos = todos.slice().sort((a, b) => b.timestamp - a.timestamp);
+
+  const sortedTodos = useMemo(() => {
+    return todos.slice().sort((a:Todo, b:Todo) => b.timestamp.getTime() - a.timestamp.getTime());
+  }, [todos]);
 
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (status === Status.SUCCEEDED) {
-      saveState(todos);
+      saveTodosState(todos);
     }
   }, [todos]);
 
