@@ -1,12 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
-import {
-  Todo,
-  removeTodo,
-  toggleTodo,
-  Status,
-} from '../../redux/todosSlice';
+import { Todo, removeTodo, toggleTodo, Status } from '../../redux/todosSlice';
 import { saveTodosState } from '../../utils/db';
 import {
   List,
@@ -25,7 +20,11 @@ const TodoList = () => {
   const status = useSelector((state: RootState) => state.todosList.status);
 
   const sortedTodos = useMemo(() => {
-    return todos.slice().sort((a:Todo, b:Todo) => b.timestamp.getTime() - a.timestamp.getTime());
+    return todos
+      .slice()
+      .sort(
+        (a: Todo, b: Todo) => b.timestamp.getTime() - a.timestamp.getTime()
+      );
   }, [todos]);
 
   const dispatch: AppDispatch = useDispatch();

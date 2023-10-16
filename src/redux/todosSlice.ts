@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import { fetchTodos } from '../utils/db';
 
 export interface Todo {
   id: string;
@@ -16,16 +15,14 @@ interface TodosState {
 }
 
 export enum Status {
-  LOADING = 'loading',
   SUCCEEDED = 'succeeded',
-  FAILED = 'failed',
 }
 
 const initialState: TodosState = {
   todos: [],
 };
 
-const todosSlice = createSlice({
+export const todosSlice = createSlice({
   name: 'todosList',
   initialState,
   reducers: {
@@ -50,20 +47,10 @@ const todosSlice = createSlice({
         todo.completed = !todo.completed;
       }
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchTodos.pending, (state) => {
-        state.status = Status.LOADING;
-      })
-      .addCase(fetchTodos.fulfilled, (state, action: PayloadAction<Todo[]>) => {
-        state.status = Status.SUCCEEDED;
-        state.todos = action.payload;
-      })
-      .addCase(fetchTodos.rejected, (state, action) => {
-        state.status = Status.FAILED;
-        state.error = action.error.message;
-      });
+    todosLoaded: (state, action: PayloadAction<Todo[]>) => {
+      state.status = Status.SUCCEEDED;
+      state.todos = action.payload;
+    },
   },
 });
 

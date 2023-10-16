@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchTheme } from '../utils/db';
 
 export enum Theme {
   DARK = 'dark',
@@ -14,7 +13,7 @@ const initialState: appState = {
   mode: Theme.LIGHT,
 };
 
-const appSlice = createSlice({
+export const appSlice = createSlice({
   name: 'appConfig',
   initialState,
   reducers: {
@@ -24,11 +23,12 @@ const appSlice = createSlice({
     ) => {
       state.mode = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchTheme.fulfilled, (state, action) => {
+    themeFetched: (
+      state,
+      action: PayloadAction<Theme.LIGHT | Theme.DARK | undefined>
+    ) => {
       state.mode = action.payload || Theme.LIGHT;
-    });
+    },
   },
 });
 
