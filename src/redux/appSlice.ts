@@ -1,50 +1,33 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const LIGHT = 'light';
-export const DARK = 'dark';
-
-interface appState {
-  mode: 'light' | 'dark' | undefined;
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
 }
 
-export const saveState = (mode: 'light' | 'dark' | undefined) => {
-  try {
-    localStorage.setItem('mode', mode || LIGHT);
-  } catch (error) {
-    console.error('Error saving state:', error);
-  }
+interface appState {
+  mode: Theme.LIGHT | Theme.DARK | undefined;
+}
+
+const initialState: appState = {
+  mode: Theme.LIGHT,
 };
 
-const loadState = (): appState => {
-  try {
-    const mode = localStorage.getItem('mode');
-    if (!mode) {
-      return {
-        mode: undefined,
-      };
-    }
-    return {
-      mode: mode === DARK ? DARK : LIGHT,
-    };
-  } catch (error) {
-    console.error('Error loading state:', error);
-    return {
-      mode: LIGHT,
-    };
-  }
-};
-
-const initialState: appState = loadState();
-
-const appSlice = createSlice({
+export const appSlice = createSlice({
   name: 'appConfig',
   initialState,
   reducers: {
     switchTheme: (
       state,
-      action: PayloadAction<'light' | 'dark' | undefined>
+      action: PayloadAction<Theme.LIGHT | Theme.DARK | undefined>
     ) => {
       state.mode = action.payload;
+    },
+    themeFetched: (
+      state,
+      action: PayloadAction<Theme.LIGHT | Theme.DARK | undefined>
+    ) => {
+      state.mode = action.payload || Theme.LIGHT;
     },
   },
 });

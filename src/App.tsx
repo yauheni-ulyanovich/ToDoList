@@ -1,6 +1,6 @@
 import './App.scss';
 
-import React, { useMemo, createContext, useEffect } from 'react';
+import React, { useMemo, createContext } from 'react';
 import TodoList from './components/TodoList/TodoList';
 import AddTodo from './components/AddTodo/AddTodo';
 import {
@@ -14,41 +14,29 @@ import {
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { switchTheme, saveState, LIGHT, DARK } from './redux/appSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './redux/store';
+import { switchTheme, Theme } from './redux/appSlice';
+import { saveTheme } from './utils/db';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './redux/store';
+import { useTodos } from './utils/useTodosHook';
+import { useTheme } from './utils/useThemeHook';
 
 const ColorModeContext = createContext({
-  toggleColorMode: (mode: 'light' | 'dark' | undefined) => {},
+  toggleColorMode: (mode: Theme.LIGHT | Theme.DARK | undefined) => {},
 });
 
 const App = () => {
-  const dispatch = useDispatch();
-
-  const mode = useSelector((state: RootState) => state.config.mode);
-
-  const prefersColorScheme = useMediaQuery('(prefers-color-scheme: dark)')
-    ? DARK
-    : LIGHT;
-
-  useEffect(() => {
-    if (!mode) {
-      dispatch(switchTheme(prefersColorScheme));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (mode) {
-      saveState(mode);
-    }
-  }, [mode]);
+  useTodos();
+  const mode = useTheme();
+  const dispatch: AppDispatch = useDispatch();
 
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: (mode: 'light' | 'dark' | undefined) => {
-        dispatch(switchTheme(mode === LIGHT ? DARK : LIGHT));
+      toggleColorMode: (mode: Theme.LIGHT | Theme.DARK | undefined) => {
+        const theme = mode === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
+        dispatch(switchTheme(theme));
+        saveTheme(theme);
       },
     }),
     []

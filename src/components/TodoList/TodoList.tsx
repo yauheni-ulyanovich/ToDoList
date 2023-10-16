@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../redux/store';
-import {
-  Todo,
-  removeTodo,
-  toggleTodo,
-  saveState,
-} from '../../redux/todosSlice';
+import { RootState, AppDispatch } from '../../redux/store';
+import { Todo, removeTodo, toggleTodo, Status } from '../../redux/todosSlice';
+import { saveTodosState } from '../../utils/db';
 import {
   List,
   ListItem,
@@ -21,11 +17,22 @@ import { TransitionGroup } from 'react-transition-group';
 
 const TodoList = () => {
   const todos = useSelector((state: RootState) => state.todosList.todos);
+  const status = useSelector((state: RootState) => state.todosList.status);
 
-  const dispatch = useDispatch();
+  const sortedTodos = useMemo(() => {
+    return todos
+      .slice()
+      .sort(
+        (a: Todo, b: Todo) => b.timestamp.getTime() - a.timestamp.getTime()
+      );
+  }, [todos]);
+
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    saveState(todos);
+    if (status === Status.SUCCEEDED) {
+      saveTodosState(todos);
+    }
   }, [todos]);
 
   const handleDelete = (id: string) => {
@@ -39,7 +46,7 @@ const TodoList = () => {
   return (
     <List sx={{ width: '100%', maxHeight: '50vh', overflowY: 'auto' }}>
       <TransitionGroup>
-        {todos.map((todo: Todo) => (
+        {sortedTodos.map((todo: Todo) => (
           <Collapse in={true} timeout='auto' unmountOnExit key={todo.id}>
             <ListItem key={todo.id}>
               <Checkbox

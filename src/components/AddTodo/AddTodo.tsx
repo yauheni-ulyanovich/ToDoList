@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTodo } from '../../redux/todosSlice';
-import { RootState } from '../../redux/store';
+import { RootState, AppDispatch } from '../../redux/store';
 
 const AddTodo = () => {
   const [todoText, setTodoText] = useState('');
 
   const [addBtnDisabled, setAddBtnDisabled] = useState(true);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const todos = useSelector((state: RootState) => state.todosList.todos);
 
